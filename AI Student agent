@@ -1,0 +1,67 @@
+import google.generativeai as genai
+
+# Replace with your Gemini API key
+genai.configure(api_key="AQ.Ab8RN6JXJMVaTwaF29nEpHwdWwfUDXbbzqmeuZyajW9HyEwYEw")
+
+model = genai.GenerativeModel("gemini-1.5-flash")
+
+print("===== AI Student Study Agent =====\n")
+
+name = input("Student Name: ")
+course = input("Course/Branch: ")
+subject = input("Subject: ")
+days = input("Days Left for Exam: ")
+hours = input("Study Hours Per Day: ")
+
+prompt = f"""
+You are an AI Study Assistant.
+
+Student Details:
+Name: {name}
+Course: {course}
+Subject: {subject}
+Days Left: {days}
+Study Hours: {hours}
+
+Generate:
+1. A daily study plan.
+2. A revision timetable.
+3. Five quiz questions with answers.
+4. Tell if the student is exam ready and give suggestions.
+5. Give one motivational message.
+
+Keep the language simple and student-friendly.
+"""
+
+response = model.generate_content(prompt)
+
+print("\n========== AI STUDY REPORT ==========\n")
+print(response.text)
+
+while True:
+    print("\n1. Ask Doubt")
+    print("2. Get Motivation")
+    print("3. Exit")
+
+    choice = input("Enter choice: ")
+
+    if choice == "1":
+        doubt = input("Enter your doubt: ")
+        ans = model.generate_content(
+            f"Explain this in simple words for a college student:\n{doubt}"
+        )
+        print("\nAnswer:\n")
+        print(ans.text)
+
+    elif choice == "2":
+        msg = model.generate_content(
+            "Give a short motivational message for exam preparation."
+        )
+        print("\n", msg.text)
+
+    elif choice == "3":
+        print("\nBest of Luck for your Exams,", name)
+        break
+
+    else:
+        print("Invalid Choice!")
